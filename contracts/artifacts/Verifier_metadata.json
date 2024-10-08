@@ -1,0 +1,86 @@
+{
+	"compiler": {
+		"version": "0.8.26+commit.8a97fa7a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "uint256[2]",
+						"name": "a",
+						"type": "uint256[2]"
+					},
+					{
+						"internalType": "uint256[2][2]",
+						"name": "b",
+						"type": "uint256[2][2]"
+					},
+					{
+						"internalType": "uint256[2]",
+						"name": "c",
+						"type": "uint256[2]"
+					},
+					{
+						"internalType": "uint256[2]",
+						"name": "input",
+						"type": "uint256[2]"
+					}
+				],
+				"name": "verifyProof",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "r",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {
+				"verifyProof(uint256[2],uint256[2][2],uint256[2],uint256[2])": {
+					"returns": {
+						"r": " bool true if proof is valid"
+					}
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/verifier.sol": "Verifier"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/verifier.sol": {
+			"keccak256": "0xd122f8debf4df8a3fc159fc1e3cb3adf20b3c455167772671e36411f8d0c4156",
+			"license": "GPL-3.0",
+			"urls": [
+				"bzz-raw://597f11ca3f9c4686cf9afa4dd660992f0b9064c76284d48d2d271519a326b64c",
+				"dweb:/ipfs/QmSu78WonLYZ4gEbyrbv92Tw8hbhWvwgjTYNtZXLZ3XivW"
+			]
+		}
+	},
+	"version": 1
+}
