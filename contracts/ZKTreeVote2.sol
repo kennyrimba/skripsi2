@@ -39,10 +39,6 @@ contract ZKTreeVote is ZKTree {
         _;
     }
 
-    function registerValidator(address _validator) external onlyOwner {
-        validators[_validator] = true;
-    }
-
     function registerCommitment(
         uint256 _uniqueHash,
         uint256 _commitment
