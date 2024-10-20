@@ -89,6 +89,50 @@
 				"type": "event"
 			},
 			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "validator",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "uniqueHash",
+						"type": "uint256"
+					}
+				],
+				"name": "ValidatorApproved",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "voter",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "uniqueHash",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "commitment",
+						"type": "uint256"
+					}
+				],
+				"name": "VoterSubmitted",
+				"type": "event"
+			},
+			{
 				"inputs": [],
 				"name": "FIELD_SIZE",
 				"outputs": [
@@ -144,6 +188,19 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
+						"name": "_uniqueHash",
+						"type": "uint256"
+					}
+				],
+				"name": "approveCommitment",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
 					}
@@ -173,6 +230,25 @@
 						"internalType": "bool",
 						"name": "",
 						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "commitmentss",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -281,6 +357,24 @@
 						"internalType": "address",
 						"name": "",
 						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getPendingCommitments",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "address[]",
+						"name": "",
+						"type": "address[]"
 					}
 				],
 				"stateMutability": "view",
@@ -415,6 +509,19 @@
 			},
 			{
 				"inputs": [],
+				"name": "numPending",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "owner",
 				"outputs": [
 					{
@@ -430,18 +537,38 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "_uniqueHash",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_commitment",
+						"name": "",
 						"type": "uint256"
 					}
 				],
-				"name": "registerCommitment",
-				"outputs": [],
-				"stateMutability": "nonpayable",
+				"name": "pendingCommitmentss",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "pendingUniqueHashes",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -541,6 +668,24 @@
 			{
 				"inputs": [
 					{
+						"internalType": "uint256",
+						"name": "_uniqueHash",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_commitment",
+						"type": "uint256"
+					}
+				],
+				"name": "submitCommitment",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "address",
 						"name": "",
 						"type": "address"
@@ -606,6 +751,25 @@
 				"name": "vote",
 				"outputs": [],
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "voterSubmissions",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -680,7 +844,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/ZKTreeVote3.sol": "ZKTreeVote"
+			"contracts/ZKTreeVote4.sol": "ZKTreeVote"
 		},
 		"evmVersion": "cancun",
 		"libraries": {},
@@ -694,12 +858,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/ZKTreeVote3.sol": {
-			"keccak256": "0xf0ad8b40db01d1ced50d89b9c7e5ad74042ecbf2be0572db82b516ded2db9fc1",
+		"contracts/ZKTreeVote4.sol": {
+			"keccak256": "0x29fad14cea5a0a167476e87c355275b510e1d94e141711cacb6136d47c1d26b7",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://5d807a61bda7b173d40b37437544e8168dcd7182d0576c22fd12c643225e0fd8",
-				"dweb:/ipfs/QmNPgdwpSAnmRM4i8ZGKcxcfLmdePNrSc5sgcj8hDLyZWe"
+				"bzz-raw://3b227550b8630abbcaad74dc6cf35573dc253e1b90c428f2efce4c10991e1684",
+				"dweb:/ipfs/QmPHH3dFdksYDzJG8EwR5Kh3x9muK3QyF263ELgZ2NUtae"
 			]
 		},
 		"hardhat/console.sol": {
