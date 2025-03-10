@@ -23,9 +23,24 @@
 						"type": "address"
 					},
 					{
-						"internalType": "string[]",
-						"name": "_candidateNames",
-						"type": "string[]"
+						"internalType": "uint256",
+						"name": "_registrationStart",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_registrationEnd",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_votingStart",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_votingEnd",
+						"type": "uint256"
 					}
 				],
 				"stateMutability": "nonpayable",
@@ -94,25 +109,6 @@
 					{
 						"indexed": true,
 						"internalType": "address",
-						"name": "validator",
-						"type": "address"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "uniqueHash",
-						"type": "uint256"
-					}
-				],
-				"name": "ValidatorApproved",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "address",
 						"name": "voter",
 						"type": "address"
 					},
@@ -129,7 +125,7 @@
 						"type": "uint256"
 					}
 				],
-				"name": "VoterSubmitted",
+				"name": "VoterRegistered",
 				"type": "event"
 			},
 			{
@@ -188,19 +184,6 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "_uniqueHash",
-						"type": "uint256"
-					}
-				],
-				"name": "approveCommitment",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
 					}
@@ -209,8 +192,18 @@
 				"outputs": [
 					{
 						"internalType": "string",
-						"name": "",
+						"name": "name",
 						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "voteCount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "exists",
+						"type": "bool"
 					}
 				],
 				"stateMutability": "view",
@@ -364,24 +357,6 @@
 			},
 			{
 				"inputs": [],
-				"name": "getPendingCommitments",
-				"outputs": [
-					{
-						"internalType": "uint256[]",
-						"name": "",
-						"type": "uint256[]"
-					},
-					{
-						"internalType": "address[]",
-						"name": "",
-						"type": "address[]"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
 				"name": "getValidators",
 				"outputs": [
 					{
@@ -439,6 +414,25 @@
 					}
 				],
 				"name": "isKnownRoot",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_uniqueHash",
+						"type": "uint256"
+					}
+				],
+				"name": "isVoterRegistered",
 				"outputs": [
 					{
 						"internalType": "bool",
@@ -509,39 +503,7 @@
 			},
 			{
 				"inputs": [],
-				"name": "numPending",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
 				"name": "owner",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "pendingCommitmentss",
 				"outputs": [
 					{
 						"internalType": "address",
@@ -575,11 +537,21 @@
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "_validator",
+						"name": "_voter",
 						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_uniqueHash",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_commitment",
+						"type": "uint256"
 					}
 				],
-				"name": "registerValidator",
+				"name": "registerVoter",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -669,29 +641,11 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "_uniqueHash",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_commitment",
-						"type": "uint256"
-					}
-				],
-				"name": "submitCommitment",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
 						"name": "",
-						"type": "address"
+						"type": "uint256"
 					}
 				],
-				"name": "validators",
+				"name": "uniqueHashes",
 				"outputs": [
 					{
 						"internalType": "bool",
@@ -751,25 +705,6 @@
 				"name": "vote",
 				"outputs": [],
 				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"name": "voterSubmissions",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -838,7 +773,14 @@
 		},
 		"userdoc": {
 			"kind": "user",
-			"methods": {},
+			"methods": {
+				"getValidators()": {
+					"notice": "function registerValidator(address _validator) external onlyOwner { require(!validators[_validator], \"Validator already registered!\"); validators[_validator] = true; validatorList.push(_validator); }*"
+				},
+				"vote(uint256,uint256,uint256,uint256[2],uint256[2][2],uint256[2])": {
+					"notice": "// New function to batch register multiple voters at once (gas optimization) function batchRegisterVoters( address[] calldata _voters, uint256[] calldata _uniqueHashes, uint256[] calldata _commitments ) external onlyOwner withinRegistrationPeriod { require( _voters.length == _uniqueHashes.length &&  _uniqueHashes.length == _commitments.length, \"Arrays must have the same length\" ); for (uint i = 0; i < _voters.length; i++) { require(!voterRegistered[_voters[i]], \"Voter has already been registered!\"); require(!uniqueHashes[_uniqueHashes[i]], \"This unique hash is already used!\"); voterRegistered[_voters[i]] = true; uniqueHashes[_uniqueHashes[i]] = true; commitments[_uniqueHashes[i]] = _commitments[i]; emit VoterRegistered(_voters[i], _uniqueHashes[i], _commitments[i]); } } function approveCommitment( uint256 _uniqueHash ) external { require(validators[msg.sender], \"Only validator can approve!\"); require(pendingCommitmentss[_uniqueHash] != address(0), \"Unique hash not submitted!\"); // Mark the unique hash as used for future voting uniqueHashes[_uniqueHash] = true; delete pendingCommitmentss[_uniqueHash]; // Remove from pending after approval numPending--; // Decrement the count of pending commitments emit ValidatorApproved(msg.sender, _uniqueHash); }*"
+				}
+			},
 			"version": 1
 		}
 	},
@@ -859,11 +801,11 @@
 	},
 	"sources": {
 		"contracts/ZKTreeVote4.sol": {
-			"keccak256": "0x29fad14cea5a0a167476e87c355275b510e1d94e141711cacb6136d47c1d26b7",
+			"keccak256": "0x976d61769c9cb733a2f98782f96f2f72ec99f681d91edc1439e098b668dd083c",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://3b227550b8630abbcaad74dc6cf35573dc253e1b90c428f2efce4c10991e1684",
-				"dweb:/ipfs/QmPHH3dFdksYDzJG8EwR5Kh3x9muK3QyF263ELgZ2NUtae"
+				"bzz-raw://8638d43e05b25a826028741f408ad82102b5282672bb75fa2d969ce7867cfd86",
+				"dweb:/ipfs/QmPMmkmkpoLKtg3E393VwnqHjkwSrrM5ZUdm5fYCa3eVkm"
 			]
 		},
 		"hardhat/console.sol": {

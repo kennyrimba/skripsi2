@@ -5,15 +5,19 @@ import "zk-merkle-tree/contracts/ZKTree.sol";
 
 contract ZKTreeVote is ZKTree {
     address public owner;
-    mapping(address => bool) public validators;
-    mapping(uint256 => bool) uniqueHashes;
-    mapping(address => bool) public voterSubmissions; 
-    mapping(uint256 => uint256) public commitmentss; 
-    mapping(uint256 => address) public pendingCommitmentss; // New mapping to track pending commitments
-    uint public numPending; // Counter for pending commitments
+    mapping(uint256 => bool) public uniqueHashes;
+    mapping(uint256 => uint256) public commitmentss; // Renamed from commitmentss for clarity
     uint public numCandidates;
-    mapping(uint => string) public candidates;  
-    mapping(uint => uint) optionCounter;
+
+    // Define a struct for candidate information
+    struct Candidate {
+        string name;        // Name of the candidate (max 20 chars)
+        uint voteCount;     // Number of votes received
+        bool exists;        // To check if candidate exists
+    }
+
+    // Replace the existing mappings with this
+    mapping(uint => Candidate) public candidates;
 
     uint256 public registrationStart;
     uint256 public registrationEnd;
@@ -24,8 +28,7 @@ contract ZKTreeVote is ZKTree {
 
     event CandidateAdded(uint indexed candidateId, string name);
     event CandidateDeleted(uint indexed candidateId);
-    event VoterSubmitted(address indexed voter, uint256 uniqueHash, uint256 commitment);
-    event ValidatorApproved(address indexed validator, uint256 uniqueHash);
+    event VoterRegistered(address indexed voter, uint256 uniqueHash, uint256 commitment);
 
     //DEBUGGING VARIABLES
     address[] private validatorList;
@@ -34,17 +37,23 @@ contract ZKTreeVote is ZKTree {
         uint32 _levels,
         IHasher _hasher,
         IVerifier _verifier,
-        string[] memory _candidateNames
+        uint256 _registrationStart,
+        uint256 _registrationEnd,
+        uint256 _votingStart,
+        uint256 _votingEnd
     ) ZKTree(_levels, _hasher, _verifier) {
+        require(_registrationStart < _registrationEnd, "Registration start must be before end time");
+        require(_votingStart < _votingEnd, "Voting start must be before end time");
+        require(_registrationEnd <= _votingStart, "Registration must end before voting starts");
+
         owner = msg.sender;
-        numCandidates = _candidateNames.length;
-        
-        // Initialize candidate names and their vote counters
-        for (uint i = 0; i < numCandidates; i++) {
-            candidates[i] = _candidateNames[i];
-            optionCounter[i] = 0;
-            emit CandidateAdded(i, _candidateNames[i]);
-        }
+        numCandidates = 0;
+
+        // Set the registration and voting periods
+        registrationStart = _registrationStart;
+        registrationEnd = _registrationEnd;
+        votingStart = _votingStart;
+        votingEnd = _votingEnd;
     }
 
     modifier onlyOwner() {
@@ -68,18 +77,44 @@ contract ZKTreeVote is ZKTree {
         _;
     }
 
-    function submitCommitment(
+    function registerVoter(
+        address _voter,
         uint256 _uniqueHash,
         uint256 _commitment
-        ) external withinRegistrationPeriod {
-            require(!voterSubmissions[msg.sender], "Voter has already submitted!");
-            voterSubmissions[msg.sender] = true;
-            commitmentss[_uniqueHash] = _commitment; 
-            pendingCommitmentss[_uniqueHash] = msg.sender; // Store the voter's address for the unique hash
-            pendingUniqueHashes.push(_uniqueHash); // Add unique hash to the array
-            numPending++; // Increment the count of pending commitments
-            emit VoterSubmitted(msg.sender, _uniqueHash, _commitment);
+    ) external onlyOwner withinRegistrationPeriod {
+        require(!uniqueHashes[_uniqueHash], "This unique hash is already used!");
+        
+        uniqueHashes[_uniqueHash] = true;
+        commitmentss[_uniqueHash] = _commitment;
+        
+        emit VoterRegistered(_voter, _uniqueHash, _commitment);
+    }
+
+/**
+
+    // New function to batch register multiple voters at once (gas optimization)
+    function batchRegisterVoters(
+        address[] calldata _voters,
+        uint256[] calldata _uniqueHashes,
+        uint256[] calldata _commitments
+    ) external onlyOwner withinRegistrationPeriod {
+        require(
+            _voters.length == _uniqueHashes.length && 
+            _uniqueHashes.length == _commitments.length,
+            "Arrays must have the same length"
+        );
+        
+        for (uint i = 0; i < _voters.length; i++) {
+            require(!voterRegistered[_voters[i]], "Voter has already been registered!");
+            require(!uniqueHashes[_uniqueHashes[i]], "This unique hash is already used!");
+            
+            voterRegistered[_voters[i]] = true;
+            uniqueHashes[_uniqueHashes[i]] = true;
+            commitments[_uniqueHashes[i]] = _commitments[i];
+            
+            emit VoterRegistered(_voters[i], _uniqueHashes[i], _commitments[i]);
         }
+    }
 
     function approveCommitment(
         uint256 _uniqueHash
@@ -93,18 +128,7 @@ contract ZKTreeVote is ZKTree {
         numPending--; // Decrement the count of pending commitments
         emit ValidatorApproved(msg.sender, _uniqueHash);
     }
-
-    function getPendingCommitments() external view returns (uint256[] memory, address[] memory) {
-        uint256[] memory uniqueHashList = new uint256[](numPending);
-        address[] memory voterAddresses = new address[](numPending);
-        
-        for (uint256 i = 0; i < numPending; i++) {
-            uniqueHashList[i] = pendingUniqueHashes[i];
-            voterAddresses[i] = pendingCommitmentss[pendingUniqueHashes[i]];
-        }
-
-        return (uniqueHashList, voterAddresses);
-    }
+**/
 
     function vote(
         uint _candidateId,
@@ -115,6 +139,8 @@ contract ZKTreeVote is ZKTree {
         uint[2] memory _proof_c
     ) external withinVotingPeriod {
         require(_candidateId < numCandidates, "Invalid candidate!");
+        require(candidates[_candidateId].exists, "Candidate does not exist!");
+        
         _nullify(
             bytes32(_nullifier),
             bytes32(_root),
@@ -122,35 +148,38 @@ contract ZKTreeVote is ZKTree {
             _proof_b,
             _proof_c
         );
-        optionCounter[_candidateId] = optionCounter[_candidateId] + 1;
+        
+        candidates[_candidateId].voteCount++;
     }
 
     function getOptionCounter(uint _candidateId) external view returns (uint) {
-        return optionCounter[_candidateId];
+        return candidates[_candidateId].voteCount;
     }
 
-    // Add a new candidate
     function addCandidate(string memory _name) external onlyOwner {
-        candidates[numCandidates] = _name;
-        optionCounter[numCandidates] = 0;
+        require(bytes(_name).length <= 20, "Name must be 20 characters or less");
+        
+        candidates[numCandidates] = Candidate({
+            name: _name,
+            voteCount: 0,
+            exists: true
+        });
+        
         emit CandidateAdded(numCandidates, _name);
         numCandidates++;
     }
 
-    // Delete an existing candidate
     function deleteCandidate(uint _candidateId) external onlyOwner {
         require(_candidateId < numCandidates, "Invalid candidate ID!");
         delete candidates[_candidateId];
-        delete optionCounter[_candidateId];
         emit CandidateDeleted(_candidateId);
     }
 
-    // Retrieve all candidates and their count
     function getAllCandidates() external view returns (uint, string[] memory) {
         string[] memory names = new string[](numCandidates);
         
         for (uint i = 0; i < numCandidates; i++) {
-            names[i] = candidates[i];
+            names[i] = candidates[i].name;
         }
 
         return (numCandidates, names);
@@ -170,16 +199,23 @@ contract ZKTreeVote is ZKTree {
         votingEnd = _end;
     }
 
+    // Check if a voter is registered
+    function isVoterRegistered(uint256 _uniqueHash) external view returns (bool) {
+        return uniqueHashes[_uniqueHash];
+    }
+
     //DEBUGGING FUNCTIONS
     function getOwner() external view returns (address) {
         return owner;
     }
 
+/**
     function registerValidator(address _validator) external onlyOwner {
         require(!validators[_validator], "Validator already registered!");
         validators[_validator] = true;
         validatorList.push(_validator);
     }
+**/
 
     function getValidators() external view returns (address[] memory) {
         return validatorList;
