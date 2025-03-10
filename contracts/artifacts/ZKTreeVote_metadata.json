@@ -312,6 +312,11 @@
 						"type": "uint256"
 					},
 					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					},
+					{
 						"internalType": "string[]",
 						"name": "",
 						"type": "string[]"
@@ -806,11 +811,11 @@
 	},
 	"sources": {
 		"contracts/ZKTreeVote5.sol": {
-			"keccak256": "0x0ce42cc4515b75bfd3248136b241076d76f5e74c7f9639896192778923e27b09",
+			"keccak256": "0x771095af2ea8f7022ed304e899c9191513dafedf1a73a96f0f9265c4a35fbd48",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://99a019616c9bafe3d3bf2819f9de5aa5ab8a91889b17be3bd113d5322183f2ac",
-				"dweb:/ipfs/QmcXihPfQNRLgVVneWvJYMvQm21aYky5eaRTEmAD81TfC7"
+				"bzz-raw://9fbe861f609c22bdf4d4572b01b9a0e71ac1c5b8e7c7eef549047eaa5aa0767c",
+				"dweb:/ipfs/QmUqdeybqAFA2Xn2fSyhqbDgbHTHrRvjjU9x4zDo3Xopnn"
 			]
 		},
 		"hardhat/console.sol": {

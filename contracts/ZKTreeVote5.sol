@@ -177,7 +177,7 @@ contract ZKTreeVote is ZKTree {
         emit CandidateDeleted(_candidateId);
     }
 
-    function getAllCandidates() external view returns (uint, string[] memory) {
+    function getAllCandidates() external view returns (uint, uint[] memory, string[] memory) {
         uint[] memory ids = new uint[](numCandidates);
         string[] memory names = new string[](numCandidates);
         
@@ -186,7 +186,7 @@ contract ZKTreeVote is ZKTree {
             names[i] = candidates[i].name;
         }
 
-        return (numCandidates, names);
+        return (numCandidates, ids, names);
     }
 
     // Set registration period (only owner)
