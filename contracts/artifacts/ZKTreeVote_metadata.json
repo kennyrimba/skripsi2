@@ -170,6 +170,11 @@
 			{
 				"inputs": [
 					{
+						"internalType": "uint64",
+						"name": "_id",
+						"type": "uint64"
+					},
+					{
 						"internalType": "string",
 						"name": "_name",
 						"type": "string"
@@ -191,14 +196,19 @@
 				"name": "candidates",
 				"outputs": [
 					{
+						"internalType": "uint64",
+						"name": "id",
+						"type": "uint64"
+					},
+					{
 						"internalType": "string",
 						"name": "name",
 						"type": "string"
 					},
 					{
-						"internalType": "uint256",
+						"internalType": "uint64",
 						"name": "voteCount",
-						"type": "uint256"
+						"type": "uint64"
 					},
 					{
 						"internalType": "bool",
@@ -536,11 +546,6 @@
 			{
 				"inputs": [
 					{
-						"internalType": "address",
-						"name": "_voter",
-						"type": "address"
-					},
-					{
 						"internalType": "uint256",
 						"name": "_uniqueHash",
 						"type": "uint256"
@@ -786,7 +791,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/ZKTreeVote4.sol": "ZKTreeVote"
+			"contracts/ZKTreeVote5.sol": "ZKTreeVote"
 		},
 		"evmVersion": "cancun",
 		"libraries": {},
@@ -800,12 +805,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/ZKTreeVote4.sol": {
-			"keccak256": "0x976d61769c9cb733a2f98782f96f2f72ec99f681d91edc1439e098b668dd083c",
+		"contracts/ZKTreeVote5.sol": {
+			"keccak256": "0x0ce42cc4515b75bfd3248136b241076d76f5e74c7f9639896192778923e27b09",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://8638d43e05b25a826028741f408ad82102b5282672bb75fa2d969ce7867cfd86",
-				"dweb:/ipfs/QmPMmkmkpoLKtg3E393VwnqHjkwSrrM5ZUdm5fYCa3eVkm"
+				"bzz-raw://99a019616c9bafe3d3bf2819f9de5aa5ab8a91889b17be3bd113d5322183f2ac",
+				"dweb:/ipfs/QmcXihPfQNRLgVVneWvJYMvQm21aYky5eaRTEmAD81TfC7"
 			]
 		},
 		"hardhat/console.sol": {
