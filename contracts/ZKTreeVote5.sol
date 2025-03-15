@@ -159,6 +159,11 @@ contract ZKTreeVote is ZKTree {
 
     function addCandidate(uint64 _id, string memory _name) external onlyOwner {
         require(bytes(_name).length <= 20, "Name must be 20 characters or less");
+
+        // Check if a candidate with this ID already exists
+        for (uint i = 0; i < numCandidates; i++) {
+            require(candidates[i].id != _id, "Candidate with this ID already exists");
+        }
         
         candidates[numCandidates] = Candidate({
             id: _id,
