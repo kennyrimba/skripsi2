@@ -41,6 +41,11 @@
 						"internalType": "uint256",
 						"name": "_votingEnd",
 						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "_electionName",
+						"type": "string"
 					}
 				],
 				"stateMutability": "nonpayable",
@@ -101,6 +106,25 @@
 					}
 				],
 				"name": "Commit",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "oldName",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "newName",
+						"type": "string"
+					}
+				],
+				"name": "ElectionNameUpdated",
 				"type": "event"
 			},
 			{
@@ -284,6 +308,19 @@
 				"type": "function"
 			},
 			{
+				"inputs": [],
+				"name": "electionName",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "uint256",
@@ -320,6 +357,19 @@
 						"internalType": "string[]",
 						"name": "",
 						"type": "string[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getElectionName",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
 					}
 				],
 				"stateMutability": "view",
@@ -614,6 +664,19 @@
 			{
 				"inputs": [
 					{
+						"internalType": "string",
+						"name": "_newName",
+						"type": "string"
+					}
+				],
+				"name": "setElectionName",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "uint256",
 						"name": "_start",
 						"type": "uint256"
@@ -811,11 +874,11 @@
 	},
 	"sources": {
 		"contracts/ZKTreeVote5.sol": {
-			"keccak256": "0xdf102c25ef87ea40602bdf8a09f489c65c627868feb426150fe2453b5167ea98",
+			"keccak256": "0xbf6cd1a1c44aa7a9cd9e71a16e553320b8669c5ed3f3cd38c9f204120826ba3f",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://1cd52809e40bf40556ccc99937adce1559d11dfcdb4ffd6a3f7fbc7fb09cb8ba",
-				"dweb:/ipfs/QmZ9axxvFYNc8Xb8Tj2rUNrdrNWAyW6n8x3A8eKpJ4W95L"
+				"bzz-raw://53430e40f6472d011e7131dd3306507e4f0550fb96ee030551f176790ed4bae3",
+				"dweb:/ipfs/QmRqVUvTT5AdFEuGEhrMnzPv3BqhjBdBxC8KaJCZB29CF1"
 			]
 		},
 		"hardhat/console.sol": {

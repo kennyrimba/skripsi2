@@ -8,6 +8,7 @@ contract ZKTreeVote is ZKTree {
     mapping(uint256 => bool) public uniqueHashes;
     mapping(uint256 => uint256) public commitmentss; // Renamed from commitmentss for clarity
     uint public numCandidates;
+    string public electionName; // Added election name property
 
     // Define a struct for candidate information
     struct Candidate {
@@ -30,6 +31,7 @@ contract ZKTreeVote is ZKTree {
     event CandidateAdded(uint indexed candidateId, string name);
     event CandidateDeleted(uint indexed candidateId);
     event VoterRegistered(address indexed voter, uint256 uniqueHash, uint256 commitment);
+    event ElectionNameUpdated(string oldName, string newName); // Added event for tracking name changes
 
     //DEBUGGING VARIABLES
     address[] private validatorList;
@@ -41,7 +43,8 @@ contract ZKTreeVote is ZKTree {
         uint256 _registrationStart,
         uint256 _registrationEnd,
         uint256 _votingStart,
-        uint256 _votingEnd
+        uint256 _votingEnd,
+        string memory _electionName // Added election name parameter
     ) ZKTree(_levels, _hasher, _verifier) {
         require(_registrationStart < _registrationEnd, "Registration start must be before end time");
         require(_votingStart < _votingEnd, "Voting start must be before end time");
@@ -49,6 +52,7 @@ contract ZKTreeVote is ZKTree {
 
         owner = msg.sender;
         numCandidates = 0;
+        electionName = _electionName; // Initialize the election name
 
         // Set the registration and voting periods
         registrationStart = _registrationStart;
@@ -76,6 +80,18 @@ contract ZKTreeVote is ZKTree {
             "Not within the voting period!"
         );
         _;
+    }
+
+    // Function to update the election name (only owner)
+    function setElectionName(string memory _newName) external onlyOwner {
+        string memory oldName = electionName;
+        electionName = _newName;
+        emit ElectionNameUpdated(oldName, _newName);
+    }
+
+    // Function to get the election name
+    function getElectionName() external view returns (string memory) {
+        return electionName;
     }
 
     function registerVoter(
