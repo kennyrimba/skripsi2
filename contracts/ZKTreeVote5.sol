@@ -3,6 +3,8 @@ pragma solidity ^0.8.17;
 
 import "zk-merkle-tree/contracts/ZKTree.sol";
 
+// import "./ZKTree.sol";
+
 contract ZKTreeVote is ZKTree {
     address public owner;
     mapping(uint256 => bool) public uniqueHashes;
@@ -173,7 +175,7 @@ contract ZKTreeVote is ZKTree {
         return candidates[_candidateId].voteCount;
     }
 
-    function addCandidate(uint64 _id, string memory _name) external onlyOwner {
+    function addCandidate(uint64 _id, string memory _name) external onlyOwner withinRegistrationPeriod {
         require(bytes(_name).length <= 20, "Name must be 20 characters or less");
 
         // Check if a candidate with this ID already exists
